@@ -8,7 +8,7 @@ A personal, reusable kit of AI-agent tooling — skills, commands, and later sub
 
 ## Current focus
 
-v1 is shipped for the two existing artifacts (`source` skill, `commit-message` command). Remaining wrap-up: absorb PLAN.md Deferred/Open decisions here (done by `/source`), then delete PLAN.md.
+Shipped v1 (`source` skill, `commit-message` command). Recent change: bare `/source` detects the running tool and writes the matching guidance file; use `/source all` for both.
 
 ## Stack
 
@@ -42,26 +42,28 @@ agent-kit/
 
 | Task    | Command |
 | ------- | ------- |
-| Install | `npx skills add manu-kaushik/agent-kit@source` |
+| Install | `npx skills add manu-kaushik/agent-kit --skill source` |
 | Dev     | — |
 | Test    | `npx skills add manu-kaushik/agent-kit --list` (expect exactly one skill: `source`) |
 | Lint    | — |
 | Build   | — |
 
-`commit-message` is a manual copy to `~/.cursor/commands/` or `~/.claude/commands/`.
+`commit-message` is a manual copy to your agent's commands directory (e.g. `~/.cursor/commands/`, `~/.claude/commands/`).
 
 ## Configuration
 
-No env vars or secrets. User install paths: `~/.cursor/skills/`, `~/.cursor/commands/`, `~/.claude/skills/`, `~/.claude/commands/`.
+No env vars or secrets. Skills CLI installs to the detected agent's skills directory. Manual paths include `~/.cursor/skills/`, `~/.claude/skills/`, and equivalent paths for Codex and other supported agents.
 
 ## Architecture
 
-Two independent axes for the `source` skill:
+Two guidance files cover all agents; scope controls which get written:
 
-| Axis | Controlled by | Effect |
-| ---- | ------------- | ------ |
-| Which tool runs the skill | Install location (`~/.cursor/skills/` vs `~/.claude/skills/`) | None on behavior; skill file is identical |
-| Which guidance file it writes | Scope argument (`/source`, `/source agents`, `/source claude`) | Which of AGENTS.md / CLAUDE.md appears |
+| Scope | Guidance file | Tools |
+| ----- | ------------- | ----- |
+| `agents` | `AGENTS.md` | Cursor, Codex, Amp, Cline, Windsurf, Antigravity, etc. |
+| `claude` | `CLAUDE.md` | Claude Code only |
+
+Bare `/source` detects the running tool and picks `agents` or `claude`. Explicit `/source agents`, `/source claude`, or `/source all` overrides detection. Install location does not change skill behavior — the same `SKILL.md` runs everywhere.
 
 One skill directory in-repo. Do not reintroduce an `agents/` + `claude/` split — two `SKILL.md` copies would publish as two skills with the same name.
 
@@ -77,7 +79,7 @@ Skill vs subagent vs command: a subagent gets a fresh context and only sees the 
 
 - MIT license
 - v1 ships only existing `source` skill and `commit-message` command — no new skills, subagents, installers, or plugin manifests
-- Distribution for v1: skills CLI / `npx skills add manu-kaushik/agent-kit@source` only
+- Distribution for v1: skills CLI / `npx skills add manu-kaushik/agent-kit --skill source` only
 - Exactly one `SKILL.md` in the tree
 
 ## External services
@@ -88,7 +90,8 @@ Skill vs subagent vs command: a subagent gets a fresh context and only sees the 
 ## Decisions
 
 - **Single `skills/` tree** — one copy of each skill at repo root so the skills CLI does not publish duplicate skill names.
-- **Scope ≠ install location** — install path chooses the tool; the scope argument chooses which guidance files to write. SKILL.md needs no per-tool fork.
+- **Bare `/source` detects running tool** — default scope is `agents` (Cursor, Codex, etc.) or `claude` (Claude Code); `/source all` writes both guidance files. Explicit scope overrides detection.
+- **Scope ≠ install location** — same skill file everywhere; detection uses runtime context, not install path.
 - **v1 distribution via skills CLI only** — no custom installer or Claude plugin marketplace yet; commands remain a documented manual copy.
 - **OSS baseline** — MIT + README only; skip CONTRIBUTING, CODE_OF_CONDUCT, issue templates, and CI until an external contributor opens an issue.
 - **No versioning for v1** — track `main` only; users re-run `npx skills update`. Tag only if a skill behavior change would break existing dependents.

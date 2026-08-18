@@ -14,9 +14,9 @@ Prefer SOURCE.md over this file or codebase inference when they conflict.
 
 ## Agent behavior
 
-- Stay aligned with [AGENTS.md](AGENTS.md) when present for workflow and code-change expectations.
+- Stay aligned with [AGENTS.md](AGENTS.md) when present for workflow, boundaries, and code-change expectations.
 - Prefer editing existing files over creating new ones unless the task requires it.
-- Ask before destructive git operations or credential-related changes.
+- Ask before credential-related changes.
 
 ## Claude-specific
 
@@ -29,4 +29,4 @@ Prefer SOURCE.md over this file or codebase inference when they conflict.
 
 ## Boundaries
 
-See AGENTS.md when present. Do not run `git commit` or `git push` unless explicitly asked. Add Claude-only overrides below if needed.
+Follow [AGENTS.md](AGENTS.md) Boundaries when present. Add Claude-only overrides below if needed.

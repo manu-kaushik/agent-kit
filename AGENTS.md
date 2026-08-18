@@ -15,7 +15,6 @@ Prefer SOURCE.md over this file or codebase inference when they conflict.
 - Confirm scope before large refactors or new dependencies.
 - Match existing patterns in the codebase; read surrounding code before editing.
 - Run relevant tests or lint after substantive changes when applicable.
-- Do not commit, push, or open pull requests unless explicitly asked.
 
 ## Code changes
 
@@ -25,17 +24,25 @@ Prefer SOURCE.md over this file or codebase inference when they conflict.
 
 ## Boundaries
 
-<!-- Project-specific do and do-not lists -->
+<!-- Project-specific additions below -->
 
 **Do:**
 
-- Update SOURCE.md when project truth changes
+- Always use read-only git commands when you need repository state — e.g. `git status`, `git diff`, `git log`, `git show`.
+- Always update SOURCE.md when durable project facts change.
+- Always ask the user to run builds manually when a build is needed.
+- Always stop and report when an approach fails; wait for the user's explicit approval before retrying or trying another approach.
 
 **Do not:**
 
-- Run `git commit`, `git push`, or open pull requests unless explicitly asked
-- Rely on conversation history for project facts — use SOURCE.md
-- Remove or overwrite SOURCE.md entries without reason
+- Never run write git commands unless the user explicitly asks — includes `commit`, `push`, `tag`, `reset`, `rebase`, and other operations that mutate repository state.
+- Never open pull requests unless the user explicitly asks.
+- Never run `gh` or other GitHub CLI commands unless the user explicitly asks.
+- Never run build commands yourself — e.g. `npm run build`, `cargo build`, `make`, or equivalent; the user runs builds manually.
+- Never run Docker build commands yourself — e.g. `docker build`, `docker compose build`; the user runs Docker builds manually.
+- Never retry, loop, or switch to an alternative approach after a failure without the user's approval.
+- Never rely on conversation history for project facts — read and update SOURCE.md instead.
+- Never remove or overwrite SOURCE.md entries without reason.
 
 ## Verification
 

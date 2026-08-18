@@ -24,7 +24,7 @@ Prefer SOURCE.md over this file or codebase inference when they conflict.
 
 ## Boundaries
 
-<!-- Project-specific additions below -->
+<!-- source: boundaries-default -->
 
 **Do:**
 
@@ -43,6 +43,10 @@ Prefer SOURCE.md over this file or codebase inference when they conflict.
 - Never retry, loop, or switch to an alternative approach after a failure without the user's approval.
 - Never rely on conversation history for project facts — read and update SOURCE.md instead.
 - Never remove or overwrite SOURCE.md entries without reason.
+
+<!-- /source: boundaries-default -->
+
+<!-- Project-specific additions below -->
 
 ## Verification
 

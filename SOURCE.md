@@ -91,6 +91,7 @@ Skill vs subagent vs command: a subagent gets a fresh context and only sees the 
 
 - **Single `skills/` tree** — one copy of each skill at repo root so the skills CLI does not publish duplicate skill names.
 - **Bare `/source` detects running tool** — default scope is `agents` (Cursor, Codex, etc.) or `claude` (Claude Code); `/source all` writes both guidance files. Explicit scope overrides detection.
+- **Boundaries sync on re-run** — default Do/Do not blocks in AGENTS.md and CLAUDE.md live between `<!-- source: boundaries-default -->` markers; `/source` replaces that block from the skill template while preserving project-specific additions after `<!-- Project-specific additions below -->`.
 - **Scope ≠ install location** — same skill file everywhere; detection uses runtime context, not install path.
 - **v1 distribution via skills CLI only** — no custom installer or Claude plugin marketplace yet; commands remain a documented manual copy.
 - **OSS baseline** — MIT + README only; skip CONTRIBUTING, CODE_OF_CONDUCT, issue templates, and CI until an external contributor opens an issue.

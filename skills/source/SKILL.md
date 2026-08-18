@@ -80,13 +80,23 @@ All templates live in [templates/](templates/).
    - Skip ephemeral chat noise; record only facts that belong in the project record
    - If there is no conversation context, skip this step without blocking — repo bootstrap from step 5 is enough
 
-7. **AGENTS.md** (when scope is `agents` or `all`) — create or prepend pointer if missing; preserve all existing content.
+7. **AGENTS.md** (when scope is `agents` or `all`)
+   - **Missing** → create from [templates/AGENTS.md](templates/AGENTS.md).
+   - **Exists** → prepend [templates/AGENTS.prepend.md](templates/AGENTS.prepend.md) if marker `source:` is absent; preserve all other existing content.
+   - **Sync default Boundaries** from [templates/AGENTS.md](templates/AGENTS.md):
+     - Extract the block between `<!-- source: boundaries-default -->` and `<!-- /source: boundaries-default -->` (markers inclusive).
+     - Markers present → replace only that block with the template block.
+     - Markers absent → insert the marked template block immediately after `## Boundaries`, removing any preceding unmarked default **Do** / **Do not** lists; keep `<!-- Project-specific additions below -->` and all content after it.
+     - Never remove or overwrite project-specific additions (content after `<!-- Project-specific additions below -->`).
 
-8. **CLAUDE.md** (when scope is `claude` or `all`) — create or prepend pointer if missing; preserve all existing content.
+8. **CLAUDE.md** (when scope is `claude` or `all`)
+   - **Missing** → create from [templates/CLAUDE.md](templates/CLAUDE.md).
+   - **Exists** → prepend [templates/CLAUDE.prepend.md](templates/CLAUDE.prepend.md) if marker `source:` is absent; preserve all other existing content.
+   - **Sync default Boundaries** from [templates/CLAUDE.md](templates/CLAUDE.md) — same marker rules as AGENTS.md step 7.
 
 9. **Separation** — project facts live in SOURCE.md only. Guidance files enforce read/update behavior; do not duplicate facts.
 
-10. **Idempotent** — skip prepending when marker is present. Do not modify guidance files outside the resolved scope.
+10. **Idempotent** — skip prepending when marker is present. Sync default Boundaries from template on every run; do not modify guidance files outside the resolved scope.
 
 11. **Summarize** — briefly (≤5 lines): detected or explicit scope, one-line status per project file touched, SOURCE.md gaps still needing input. No template field lists or content dumps.
 

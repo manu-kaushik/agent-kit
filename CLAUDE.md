@@ -29,4 +29,10 @@ Prefer SOURCE.md over this file or codebase inference when they conflict.
 
 ## Boundaries
 
-Follow [AGENTS.md](AGENTS.md) Boundaries when present. Add Claude-only overrides below if needed.
+<!-- source: boundaries-default -->
+
+Follow [AGENTS.md](AGENTS.md) Boundaries when present.
+
+<!-- /source: boundaries-default -->
+
+<!-- Project-specific additions below -->

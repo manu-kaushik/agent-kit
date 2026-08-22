@@ -10,7 +10,7 @@ A personal, reusable kit of AI-agent tooling — skills and commands — portabl
 
 ## Current focus
 
-Shipped v1 (`source` skill, `commit-message` command). Default Boundaries in AGENTS.md template cover git, builds, Docker, migrations, and gh review-only rules; sync to existing projects via `/source` and boundaries markers.
+Ship v2 source skill commands (`init`, `check`, `refresh`) and docs in `docs/`.
 
 ## Stack
 
@@ -26,10 +26,12 @@ Shipped v1 (`source` skill, `commit-message` command). Default Boundaries in AGE
 ```
 agent-kit/
 ├── README.md
+├── docs/
+│   ├── source.md
+│   └── commit-message.md
 ├── LICENSE
 ├── SOURCE.md
 ├── AGENTS.md
-├── CLAUDE.md
 ├── skills/
 │   └── source/
 │       ├── SKILL.md
@@ -58,18 +60,17 @@ No env vars or secrets. Skills CLI installs to the detected agent's skills direc
 
 ## Architecture
 
-Two guidance files cover all agents; scope controls which get written:
+Three commands; `SOURCE.md` is always in scope. Flags `--agents` or `--claude` only (no `all`):
 
-| Scope | Guidance file | Tools |
-| ----- | ------------- | ----- |
-| `agents` | `AGENTS.md` | Cursor, Codex, Amp, Cline, Windsurf, Antigravity, etc. |
-| `claude` | `CLAUDE.md` | Claude Code only |
+| Command | Writes? | Purpose |
+| ------- | ------- | ------- |
+| `init` | Yes | Bootstrap SOURCE + one guidance file (detect tool if no flag) |
+| `check` | No | Read-only OK / stale / missing report |
+| `refresh` | Yes | Conservative reconcile from repo; sync Boundaries |
 
-Bare `/source` detects the running tool and picks `agents` or `claude`. Explicit `/source agents`, `/source claude`, or `/source all` overrides detection. Install location does not change skill behavior — the same `SKILL.md` runs everywhere.
+Bare `/source` aliases `init`. For both guidance files, run `init --agents` and `init --claude` separately.
 
 One skill directory in-repo. Do not reintroduce an `agents/` + `claude/` split — two `SKILL.md` copies would publish as two skills with the same name.
-
-Skill vs subagent vs command: a subagent gets a fresh context and only sees the parent prompt; use a skill when conversation context is required; use a command for short explicit procedures.
 
 ## Conventions
 
@@ -92,10 +93,10 @@ Skill vs subagent vs command: a subagent gets a fresh context and only sees the 
 ## Decisions
 
 - **Single `skills/` tree** — one copy of each skill at repo root so the skills CLI does not publish duplicate skill names.
-- **Bare `/source` detects running tool** — default scope is `agents` (Cursor, Codex, etc.) or `claude` (Claude Code); `/source all` writes both guidance files. Explicit scope overrides detection.
-- **Boundaries sync on re-run** — default Do/Do not blocks in AGENTS.md and CLAUDE.md live between `<!-- source: boundaries-default -->` markers; `/source` replaces that block from the skill template while preserving project-specific additions after `<!-- Project-specific additions below -->`.
-- **Single SOURCE.md intro** — marker plus one paragraph under `# Source` only; no prepend file; `/source` normalizes the header and removes duplicate intros from older runs.
-- **Scope ≠ install location** — same skill file everywhere; detection uses runtime context, not install path.
+- **Source skill commands** — `init` (bootstrap), `check` (read-only report), `refresh` (conservative reconcile). Flags `--agents` / `--claude` only; bare `/source` → `init`.
+- **Boundaries sync on init/refresh** — default Do/Do not blocks live between `<!-- source: boundaries-default -->` markers; preserved project-specific additions after `<!-- Project-specific additions below -->`.
+- **Single SOURCE.md intro** — marker plus one paragraph under `# Source`; normalize on init/refresh.
+- **Reading SOURCE.md** — AGENTS.md template: Current focus + Overview first; other sections on demand.
 - **v1 distribution via skills CLI only** — no custom installer or Claude plugin marketplace yet; commands remain a documented manual copy.
 - **OSS baseline** — MIT + README only; skip CONTRIBUTING, CODE_OF_CONDUCT, issue templates, and CI until an external contributor opens an issue.
 - **No versioning for v1** — track `main` only; users re-run `npx skills update`. Tag only if a skill behavior change would break existing dependents.

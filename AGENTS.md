@@ -10,6 +10,12 @@ When you learn or change durable project facts (stack, architecture, decisions, 
 
 Prefer SOURCE.md over this file or codebase inference when they conflict.
 
+## Reading SOURCE.md
+
+- Always read **Current focus** and **Overview** first.
+- Read other sections only when the task needs them (e.g. **Commands** before run/test work, **Architecture** before large refactors).
+- Never infer project facts from chat when the relevant SOURCE section exists.
+
 ## Workflow
 
 - Confirm scope before large refactors or new dependencies.

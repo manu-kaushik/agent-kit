@@ -1,6 +1,6 @@
 ---
 name: source
-description: Ensure SOURCE.md exists as the persistent project record; create or update AGENTS.md and/or CLAUDE.md to point to it. Use when the user runs /source or sets up project context. SOURCE carries project truth across all chats. Bare /source detects the running tool; optional scope is agents, claude, or all.
+description: Maintain SOURCE.md as the persistent project record. Use for /source init (bootstrap), /source check (read-only health report), or /source refresh (reconcile from repo). Optional flags --agents or --claude; bare /source runs init.
 disable-model-invocation: true
 ---
 
@@ -8,42 +8,44 @@ disable-model-invocation: true
 
 SOURCE.md is the **persistent project record** — stack, architecture, decisions, deferrals, focus. Chats are temporary; SOURCE.md is not. Any agent in any chat reads it first and updates it when project truth changes.
 
-| File        | Role | Scope |
-| ----------- | ---- | ----- |
-| `SOURCE.md` | **Required** — whole project on disk | always |
-| `AGENTS.md` | Agent workflow; enforces SOURCE-first behavior | `agents`, `all`; bare `/source` when not Claude Code |
-| `CLAUDE.md` | Claude Code guidance; imports SOURCE via `@SOURCE.md` | `claude`, `all`; bare `/source` in Claude Code |
+| File        | Role |
+| ----------- | ---- |
+| `SOURCE.md` | **Required** — whole project on disk |
+| `AGENTS.md` | Agent workflow; enforces SOURCE-first behavior |
+| `CLAUDE.md` | Claude Code guidance; imports SOURCE via `@SOURCE.md` |
 
 ## Guidance files and tools
 
-Scope names are not product names. Two guidance files cover all supported agents:
-
 | Scope | Guidance file | Tools |
 | ----- | ------------- | ----- |
-| `agents` | `AGENTS.md` | Cursor, Codex, Amp, Cline, Windsurf, Antigravity, and other agents that read repo-root agent guidance |
+| `agents` | `AGENTS.md` | Cursor, Codex, Amp, Cline, Windsurf, Antigravity, and similar |
 | `claude` | `CLAUDE.md` | Claude Code only |
 
-No separate template per tool — `AGENTS.md` is the portable file; Claude Code is the exception because of `@SOURCE.md` import syntax.
+## Commands
 
-## Scope
-
-**SOURCE.md is always included.**
+**SOURCE.md is always in scope.** Guidance file scope is controlled by flags or detection (init and refresh only).
 
 | Invocation | Action |
 | ---------- | ------ |
-| `/source` | Detect running tool → `agents` or `claude`; write matching guidance file |
-| `/source agents` | SOURCE.md + AGENTS.md |
-| `/source claude` | SOURCE.md + CLAUDE.md |
-| `/source all` | SOURCE.md + AGENTS.md + CLAUDE.md |
+| `/source init` | Bootstrap — create or update SOURCE + detected guidance file |
+| `/source init --agents` | Bootstrap — SOURCE + AGENTS.md |
+| `/source init --claude` | Bootstrap — SOURCE + CLAUDE.md |
+| `/source check` | Read-only health report — no file writes |
+| `/source check --agents` | Check SOURCE + AGENTS Boundaries only |
+| `/source check --claude` | Check SOURCE + CLAUDE Boundaries only |
+| `/source refresh` | Reconcile SOURCE (and guidance sync per scope) from repo evidence |
+| `/source refresh --agents` | Refresh SOURCE + sync AGENTS.md |
+| `/source refresh --claude` | Refresh SOURCE + sync CLAUDE.md |
+| `/source` | Same as `/source init` |
 
-Explicit scope always overrides detection.
+No `all` flag. For both guidance files, run `init --agents` and `init --claude` separately.
 
-### Detect running tool (bare `/source` only)
+### Detect running tool (init without flags)
 
 Use system/context signals from the current session — not install path, not chat history:
 
-| Running in | Scope |
-| ---------- | ----- |
+| Running in | Guidance scope |
+| ---------- | -------------- |
 | Claude Code | `claude` |
 | Cursor, Codex, Amp, Cline, Windsurf, Antigravity, or similar | `agents` |
 | Unknown | `agents` |
@@ -56,57 +58,77 @@ All templates live in [templates/](templates/).
 
 1. **Confirm target directory** — workspace root unless the user specifies another path.
 
-2. **Determine scope**
-   - Explicit `agents`, `claude`, or `all` → use that scope.
-   - No argument → detect running tool (see table above). SOURCE.md always runs.
+2. **Determine command** — `init` (including bare `/source`), `check`, or `refresh`.
 
-3. **Resolve filenames** — prefer `SOURCE.md`, `AGENTS.md`, `CLAUDE.md`. Treat lowercase variants as the same file.
+3. **Determine guidance scope** (init and refresh only)
+   - `--agents` or `--claude` → use that scope.
+   - No flag on init → detect running tool (see table above).
+   - No flag on refresh → detect running tool.
+   - Check without flags → report SOURCE only unless `--agents` / `--claude` limits guidance checks.
 
-4. **SOURCE.md** (always)
-   - **Missing** → create from [templates/SOURCE.md](templates/SOURCE.md) only. The template includes the marker and one intro paragraph — do not prepend anything else.
+4. **Resolve filenames** — prefer `SOURCE.md`, `AGENTS.md`, `CLAUDE.md`. Treat lowercase variants as the same file.
+
+### init — bootstrap
+
+5. **SOURCE.md**
+   - **Missing** → create from [templates/SOURCE.md](templates/SOURCE.md) only. Do not prepend anything else.
    - **Exists** → never erase project content from `## Overview` downward.
-     - **Marker** — if `source:` marker is absent, add `<!-- source: source-of-truth marker -->` as the first line. Do not insert a prepend block, horizontal rule, or intro paragraph before `# Source`.
-     - **Normalize header** — between `# Source` and `## Overview`, keep exactly one intro paragraph (from [templates/SOURCE.md](templates/SOURCE.md)). Remove any duplicate source-of-truth intros left by older skill versions (extra paragraphs, legacy prepend text, or content between marker and `# Source` that repeats the same guidance).
+     - **Marker** — if `source:` marker is absent, add `<!-- source: source-of-truth marker -->` as the first line.
+     - **Normalize header** — between `# Source` and `## Overview`, keep exactly one intro paragraph (from template). Remove duplicate source-of-truth intros from older runs.
      - **Sections** — append template sections not already present; do not overwrite non-empty values.
 
-5. **Bootstrap from repository** — fill empty table cells and placeholders only:
-   - Read `README.md`, dependency manifests (`package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, etc.), `Makefile`, CI configs, top-level directory layout, and key scripts
-   - When conversation context is empty or minimal, treat this step as primary — explore the repo before writing; do not skip bootstrap because the chat has no prior turns
+6. **Bootstrap from repository** — fill empty table cells and placeholders only:
+   - Read `README.md`, dependency manifests, `Makefile`, CI configs, top-level layout, key scripts
+   - When conversation context is empty or minimal, treat this step as primary
    - Do not invent facts; use `<!-- TODO: confirm -->` when uncertain
    - Do not overwrite non-empty values
 
-6. **Merge durable project knowledge** — from the current conversation and work context, append to SOURCE.md where missing:
-   - **Decisions** — new choices and rationale (append; do not remove existing)
-   - **Deferred** — planned work not yet done
-   - **Architecture** — design facts not yet recorded
-   - **Current focus** — rewrite only this section when focus clearly shifted
-   - Skip ephemeral chat noise; record only facts that belong in the project record
-   - If there is no conversation context, skip this step without blocking — repo bootstrap from step 5 is enough
+7. **Merge durable project knowledge** — from the current conversation, append where missing: Decisions, Deferred, Architecture; rewrite Current focus only when focus clearly shifted. Skip if no conversation context.
 
-7. **AGENTS.md** (when scope is `agents` or `all`)
-   - **Missing** → create from [templates/AGENTS.md](templates/AGENTS.md).
-   - **Exists** → prepend [templates/AGENTS.prepend.md](templates/AGENTS.prepend.md) if marker `source:` is absent; preserve all other existing content.
-   - **Sync default Boundaries** from [templates/AGENTS.md](templates/AGENTS.md):
-     - Extract the block between `<!-- source: boundaries-default -->` and `<!-- /source: boundaries-default -->` (markers inclusive).
-     - Markers present → replace only that block with the template block.
-     - Markers absent → insert the marked template block immediately after `## Boundaries`, removing any preceding unmarked default **Do** / **Do not** lists; keep `<!-- Project-specific additions below -->` and all content after it.
-     - Never remove or overwrite project-specific additions (content after `<!-- Project-specific additions below -->`).
+8. **AGENTS.md** (when guidance scope is `agents`) — create from template if missing; prepend pointer if marker absent; sync default Boundaries block from template (marker rules below).
 
-8. **CLAUDE.md** (when scope is `claude` or `all`)
-   - **Missing** → create from [templates/CLAUDE.md](templates/CLAUDE.md).
-   - **Exists** → prepend [templates/CLAUDE.prepend.md](templates/CLAUDE.prepend.md) if marker `source:` is absent; preserve all other existing content.
-   - **Sync default Boundaries** from [templates/CLAUDE.md](templates/CLAUDE.md) — same marker rules as AGENTS.md step 7.
+9. **CLAUDE.md** (when guidance scope is `claude`) — create from template if missing; prepend pointer if marker absent; sync default Boundaries block from template.
 
-9. **Separation** — project facts live in SOURCE.md only. Guidance files enforce read/update behavior; do not duplicate facts.
+10. **Summarize** init — scope, one-line status per file touched, gaps needing input (≤5 lines). If the other guidance file does not exist, note: run `/source init --[other]` if this repo is also used with that tool.
 
-10. **Idempotent** — skip prepending when marker is present. Sync default Boundaries from template on every run; do not modify guidance files outside the resolved scope.
+### check — read-only health report
 
-11. **Summarize** — briefly (≤5 lines): detected or explicit scope, one-line status per project file touched, SOURCE.md gaps still needing input. No template field lists or content dumps.
+**Do not create, edit, or delete any file.**
 
-    On first setup only (neither guidance file existed before this run) and scope is not `all`: add one line — e.g. "Run `/source all` if this repo is also used with [other tool]."
+5. **Read** SOURCE.md, `README.md`, dependency manifests, CI configs, top-level directory layout, and guidance files in scope.
+
+6. **Report** to the user in three groups:
+   - **OK** — sections that match the repo or need no action
+   - **Stale** — SOURCE claims X, repo shows Y (cite paths)
+   - **Missing** — template sections absent, marker missing, duplicate header intros, Boundaries block behind template, empty critical cells with repo data available
+
+7. **End with:** `Run /source refresh to reconcile.` Do not fix anything.
+
+### refresh — reconcile
+
+If SOURCE.md is missing → tell the user to run `/source init` first; stop.
+
+5. **SOURCE.md** — apply init steps 5–7, plus conservative reconciliation:
+   - Update factual fields (Stack, Commands, Repository layout) only when SOURCE is empty, contains `<!-- TODO: confirm -->`, or repo evidence clearly contradicts SOURCE
+   - When ambiguous, add `<!-- stale: … -->` rather than overwriting
+   - Normalize header (one intro between `# Source` and `## Overview`)
+   - Remove completed **Deferred** items only when repo or conversation evidence clearly shows completion
+
+6. **AGENTS.md / CLAUDE.md** (per guidance scope) — sync default Boundaries from template:
+   - Replace block between `<!-- source: boundaries-default -->` and `<!-- /source: boundaries-default -->` (markers inclusive)
+   - If markers absent → insert template block after `## Boundaries`; preserve `<!-- Project-specific additions below -->` and content after it
+   - Never remove project-specific additions
+
+7. **Summarize** refresh — what changed, what remains stale or needs manual input (≤5 lines). Suggest `/source check` to verify.
+
+### Boundaries sync (init and refresh)
+
+Extract the marked block from [templates/AGENTS.md](templates/AGENTS.md) or [templates/CLAUDE.md](templates/CLAUDE.md). Never overwrite content after `<!-- Project-specific additions below -->`.
+
+### Separation
+
+Project facts live in SOURCE.md only. Guidance files enforce read/update behavior; do not duplicate facts.
 
 ## Ongoing use
 
-`/source` ensures structure and catches up SOURCE.md from the repo and current context. During normal work in any chat, agents update SOURCE.md when project truth changes — without waiting for `/source`.
-
-Agent behavior changes → edit AGENTS.md or CLAUDE.md. Project facts change → edit SOURCE.md.
+During normal work, agents update SOURCE.md when project truth changes — without waiting for `/source`. Agent behavior → edit AGENTS.md or CLAUDE.md. Project facts → edit SOURCE.md.

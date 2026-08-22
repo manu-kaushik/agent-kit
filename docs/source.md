@@ -4,26 +4,22 @@ Create and maintain **SOURCE.md** — the persistent project record for a repo �
 
 ## Install
 
-The skills CLI installs from GitHub and detects which agent you are using. Commands are installed separately — see [commit-message.md](commit-message.md).
-
 | Scope | Command |
 | ----- | ------- |
 | Every project | `npx skills add manu-kaushik/agent-kit --skill source -g` |
 | Current project only | `npx skills add manu-kaushik/agent-kit --skill source` |
 
-Preview available skills:
-
 ```bash
-npx skills add manu-kaushik/agent-kit --list
+npx skills add manu-kaushik/agent-kit --list   # preview
 ```
 
-**Manual install:** copy [`skills/source/`](../skills/source/) to your agent's skills directory (e.g. `~/.cursor/skills/source/`, `~/.claude/skills/source/`).
+**Manual install:** copy [`skills/source/`](../skills/source/) to your agent's skills directory.
 
 ## What SOURCE.md is
 
-Stack, architecture, decisions, deferrals, focus — on disk, not in chat history. Any agent in any chat reads SOURCE.md first and updates it when project facts change.
+Stack, architecture, decisions, deferrals, focus — on disk, not in chat history. Agents read it first and update it when project facts change.
 
-## Files written in a project
+## Files in a project
 
 | File | Role |
 | ---- | ---- |
@@ -31,20 +27,26 @@ Stack, architecture, decisions, deferrals, focus — on disk, not in chat histor
 | `AGENTS.md` | Workflow for Cursor, Codex, Amp, Cline, and similar agents |
 | `CLAUDE.md` | Claude Code guidance; imports SOURCE via `@SOURCE.md` |
 
-## Usage
+## Commands
 
-`SOURCE.md` is always included. Which guidance files are written depends on the invocation:
+`SOURCE.md` is always included. Optional flags: `--agents` or `--claude` (no `all` — run twice if you need both guidance files).
 
-| Invocation | Writes |
-| ---------- | ------ |
-| `/source` | `SOURCE.md` + guidance file for the **running tool** |
-| `/source agents` | `SOURCE.md`, `AGENTS.md` |
-| `/source claude` | `SOURCE.md`, `CLAUDE.md` |
-| `/source all` | `SOURCE.md`, `AGENTS.md`, `CLAUDE.md` |
+| Command | Writes? | Purpose |
+| ------- | ------- | ------- |
+| `/source init` | Yes | Bootstrap SOURCE + guidance file for the **running tool** |
+| `/source init --agents` | Yes | SOURCE + AGENTS.md |
+| `/source init --claude` | Yes | SOURCE + CLAUDE.md |
+| `/source check` | **No** | Report OK / stale / missing; suggests refresh |
+| `/source refresh` | Yes | Reconcile SOURCE from repo; sync Boundaries |
+| `/source` | Yes | Same as `init` |
 
-Bare `/source` detects the running tool (Cursor, Codex, etc. → `AGENTS.md`; Claude Code → `CLAUDE.md`). Explicit invocations override detection.
+### Typical flow
 
-Re-runs are safe: bootstrap from the repo (even in an empty chat), merge durable knowledge from the current conversation, sync default Boundaries from the skill template, and never erase existing project content.
+1. **`/source init`** — first setup (or bare `/source`)
+2. **`/source check`** — periodic read-only audit
+3. **`/source refresh`** — fix what check reported (conservative — won't overwrite filled facts without evidence)
+
+Refresh updates empty or TODO fields and clear repo mismatches. It does not blindly replace your Decisions or filled Stack entries.
 
 ## Quick start
 
@@ -52,4 +54,4 @@ Re-runs are safe: bootstrap from the repo (even in an empty chat), merge durable
 npx skills add manu-kaushik/agent-kit --skill source -g
 ```
 
-Open a project and run `/source`.
+Open a project and run `/source init`.

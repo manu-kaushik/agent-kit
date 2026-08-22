@@ -12,7 +12,7 @@ Persistent project memory for any repo; creates and maintains `SOURCE.md` plus a
 npx skills add manu-kaushik/agent-kit --skill source -g
 ```
 
-Run `/source` in a project to bootstrap. Manual install: copy [`skills/source/`](skills/source/) to your agent's skills directory.
+Run `/source init` in a project to bootstrap. Manual install: copy [`skills/source/`](skills/source/) to your agent's skills directory.
 
 ## Commands
 

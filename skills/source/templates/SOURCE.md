@@ -1,6 +1,8 @@
+<!-- source: source-of-truth marker -->
+
 # Source
 
-Persistent project record. This file is the single source of truth for the whole project — not chat history, not summaries. Any agent in any chat reads and updates this file. Keep it accurate.
+Persistent project record for this repository — not chat history, not summaries. Any agent in any chat reads this file first and updates it when project facts change.
 
 ## Overview
 

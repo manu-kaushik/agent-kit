@@ -63,8 +63,11 @@ All templates live in [templates/](templates/).
 3. **Resolve filenames** — prefer `SOURCE.md`, `AGENTS.md`, `CLAUDE.md`. Treat lowercase variants as the same file.
 
 4. **SOURCE.md** (always)
-   - **Missing** → create from [templates/SOURCE.md](templates/SOURCE.md).
-   - **Exists** → never erase or replace content. Prepend [templates/SOURCE.prepend.md](templates/SOURCE.prepend.md) if marker `source:` is absent. Append template sections not already present.
+   - **Missing** → create from [templates/SOURCE.md](templates/SOURCE.md) only. The template includes the marker and one intro paragraph — do not prepend anything else.
+   - **Exists** → never erase project content from `## Overview` downward.
+     - **Marker** — if `source:` marker is absent, add `<!-- source: source-of-truth marker -->` as the first line. Do not insert a prepend block, horizontal rule, or intro paragraph before `# Source`.
+     - **Normalize header** — between `# Source` and `## Overview`, keep exactly one intro paragraph (from [templates/SOURCE.md](templates/SOURCE.md)). Remove any duplicate source-of-truth intros left by older skill versions (extra paragraphs, legacy prepend text, or content between marker and `# Source` that repeats the same guidance).
+     - **Sections** — append template sections not already present; do not overwrite non-empty values.
 
 5. **Bootstrap from repository** — fill empty table cells and placeholders only:
    - Read `README.md`, dependency manifests (`package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, etc.), `Makefile`, CI configs, top-level directory layout, and key scripts

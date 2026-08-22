@@ -1,6 +1,8 @@
+<!-- source: source-of-truth marker -->
+
 # Source
 
-Persistent project record. This file is the single source of truth for the whole project — not chat history, not summaries. Any agent in any chat reads and updates this file. Keep it accurate.
+Persistent project record for this repository — not chat history, not summaries. Any agent in any chat reads this file first and updates it when project facts change.
 
 ## Overview
 
@@ -8,7 +10,7 @@ A personal, reusable kit of AI-agent tooling — skills, commands, and later sub
 
 ## Current focus
 
-Shipped v1 (`source` skill, `commit-message` command). Recent change: bare `/source` detects the running tool and writes the matching guidance file; use `/source all` for both.
+Shipped v1 (`source` skill, `commit-message` command). Default Boundaries in AGENTS.md template cover git, builds, Docker, migrations, and gh review-only rules; sync to existing projects via `/source` and boundaries markers.
 
 ## Stack
 
@@ -92,6 +94,7 @@ Skill vs subagent vs command: a subagent gets a fresh context and only sees the 
 - **Single `skills/` tree** — one copy of each skill at repo root so the skills CLI does not publish duplicate skill names.
 - **Bare `/source` detects running tool** — default scope is `agents` (Cursor, Codex, etc.) or `claude` (Claude Code); `/source all` writes both guidance files. Explicit scope overrides detection.
 - **Boundaries sync on re-run** — default Do/Do not blocks in AGENTS.md and CLAUDE.md live between `<!-- source: boundaries-default -->` markers; `/source` replaces that block from the skill template while preserving project-specific additions after `<!-- Project-specific additions below -->`.
+- **Single SOURCE.md intro** — marker plus one paragraph under `# Source` only; no prepend file; `/source` normalizes the header and removes duplicate intros from older runs.
 - **Scope ≠ install location** — same skill file everywhere; detection uses runtime context, not install path.
 - **v1 distribution via skills CLI only** — no custom installer or Claude plugin marketplace yet; commands remain a documented manual copy.
 - **OSS baseline** — MIT + README only; skip CONTRIBUTING, CODE_OF_CONDUCT, issue templates, and CI until an external contributor opens an issue.

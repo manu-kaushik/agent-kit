@@ -6,7 +6,7 @@ Personal, reusable kit of AI-agent skills and commands — portable across Curso
 
 ### source
 
-Persistent project memory for any repo; creates and maintains `SOURCE.md` plus agent guidance files. [Full reference →](docs/source.md)
+Persistent project memory for any repo; creates and maintains `SOURCE.md` plus agent guidance files. [Full reference →](docs/source/)
 
 ```bash
 npx skills add manu-kaushik/agent-kit --skill source
@@ -18,7 +18,7 @@ Run `/source init` in a project to bootstrap. Manual install: copy [`skills/sour
 
 ### commit-message
 
-Conventional commit message for staged changes; prints the message only, never commits. [Full reference →](docs/commit-message.md)
+Conventional commit message for staged changes; prints the message only, never commits. [Full reference →](docs/commit-message/)
 
 Copy [`commands/commit-message.md`](commands/commit-message.md) to your agent's commands directory (e.g. `~/.cursor/commands/`).
 

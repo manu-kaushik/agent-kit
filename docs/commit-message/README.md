@@ -4,7 +4,7 @@ Generate a Conventional Commits message for **staged changes** and print it in a
 
 ## Install
 
-Not covered by the skills CLI — install separately from the [source skill](source.md).
+Not covered by the skills CLI — install separately from the [source skill](../source/).
 
 Copy [`commands/commit-message.md`](../commands/commit-message.md) to your agent's commands directory:
 

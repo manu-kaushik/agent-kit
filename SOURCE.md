@@ -27,8 +27,10 @@ v2 source skill shipped (`init`, `check`, `refresh`). Deferred work: subagents, 
 agent-kit/
 ├── README.md
 ├── docs/
-│   ├── source.md
-│   └── commit-message.md
+│   ├── source/
+│   │   └── README.md
+│   └── commit-message/
+│       └── README.md
 ├── LICENSE
 ├── SOURCE.md
 ├── AGENTS.md
@@ -62,7 +64,7 @@ This repo uses **AGENTS.md** only — no root `CLAUDE.md`.
 
 ## Architecture
 
-Three commands; `SOURCE.md` is always in scope. Flags `--agents` or `--claude` only (no `all`):
+Three commands; `SOURCE.md` is always in scope. Flags `--agents` or `--claude`:
 
 | Command | Writes? | Purpose |
 | ------- | ------- | ------- |
@@ -70,7 +72,7 @@ Three commands; `SOURCE.md` is always in scope. Flags `--agents` or `--claude` o
 | `check` | No | Read-only OK / stale / missing report |
 | `refresh` | Yes | Conservative reconcile from repo; sync Boundaries |
 
-Bare `/source` aliases `init`. For both guidance files, run `init --agents` and `init --claude` separately.
+For both guidance files, run `init --agents` and `init --claude` separately.
 
 One skill directory in-repo. Do not reintroduce an `agents/` + `claude/` split — two `SKILL.md` copies would publish as two skills with the same name.
 
@@ -95,7 +97,7 @@ One skill directory in-repo. Do not reintroduce an `agents/` + `claude/` split �
 ## Decisions
 
 - **Single `skills/` tree** — one copy of each skill at repo root so the skills CLI does not publish duplicate skill names.
-- **Source skill commands** — `init` (bootstrap), `check` (read-only report), `refresh` (conservative reconcile). Flags `--agents` / `--claude` only; bare `/source` → `init`.
+- **Source skill commands** — `/source init` (bootstrap), `/source check` (read-only report), `/source refresh` (conservative reconcile). Flags `--agents` / `--claude` optional.
 - **Boundaries sync on init/refresh** — default Do/Do not blocks live between `<!-- source: boundaries-default -->` markers; preserved project-specific additions after `<!-- Project-specific additions below -->`.
 - **Single SOURCE.md intro** — marker plus one paragraph under `# Source`; normalize on init/refresh.
 - **Reading SOURCE.md** — AGENTS.md template: Current focus + Overview first; other sections on demand.

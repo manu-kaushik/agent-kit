@@ -1,6 +1,6 @@
 ---
 name: source
-description: Maintain SOURCE.md as the persistent project record. Use for /source init (bootstrap), /source check (read-only health report), or /source refresh (reconcile from repo). Optional flags --agents or --claude; bare /source runs init.
+description: Maintain SOURCE.md as the persistent project record. Use for /source init (bootstrap), /source check (read-only health report), or /source refresh (reconcile from repo). Optional flags --agents or --claude.
 disable-model-invocation: true
 ---
 
@@ -36,9 +36,8 @@ SOURCE.md is the **persistent project record** — stack, architecture, decision
 | `/source refresh` | Reconcile SOURCE (and guidance sync per scope) from repo evidence |
 | `/source refresh --agents` | Refresh SOURCE + sync AGENTS.md |
 | `/source refresh --claude` | Refresh SOURCE + sync CLAUDE.md |
-| `/source` | Same as `/source init` |
 
-No `all` flag. For both guidance files, run `init --agents` and `init --claude` separately.
+For both guidance files, run `init --agents` and `init --claude` separately.
 
 ### Detect running tool (init without flags)
 
@@ -58,7 +57,7 @@ All templates live in [templates/](templates/).
 
 1. **Confirm target directory** — workspace root unless the user specifies another path.
 
-2. **Determine command** — `init` (including bare `/source`), `check`, or `refresh`.
+2. **Determine command** — `init`, `check`, or `refresh`.
 
 3. **Determine guidance scope** (init and refresh only)
    - `--agents` or `--claude` → use that scope.
@@ -131,4 +130,4 @@ Project facts live in SOURCE.md only. Guidance files enforce read/update behavio
 
 ## Ongoing use
 
-During normal work, agents update SOURCE.md when project truth changes — without waiting for `/source`. Agent behavior → edit AGENTS.md or CLAUDE.md. Project facts → edit SOURCE.md.
+During normal work, agents update SOURCE.md when project truth changes — without waiting for `/source init`. Agent behavior → edit AGENTS.md or CLAUDE.md. Project facts → edit SOURCE.md.

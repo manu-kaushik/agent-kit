@@ -6,7 +6,7 @@ Persistent project record for this repository — not chat history, not summarie
 
 ## Overview
 
-A personal, reusable kit of AI-agent tooling — skills, commands, and later subagents — portable across Cursor, Claude Code, and other agents that consume the same files. Built for daily personal use first; public because it may help others.
+A personal, reusable kit of AI-agent tooling — skills and commands — portable across Cursor, Claude Code, and other agents that consume the same files. Built for daily personal use first; public because it may help others.
 
 ## Current focus
 

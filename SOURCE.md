@@ -10,7 +10,7 @@ A personal, reusable kit of AI-agent tooling — skills and commands — portabl
 
 ## Current focus
 
-Ship v2 source skill commands (`init`, `check`, `refresh`) and docs in `docs/`.
+v2 source skill shipped (`init`, `check`, `refresh`). Deferred work: subagents, install scripts, commit-message as skill (see Open decisions).
 
 ## Stack
 
@@ -56,7 +56,9 @@ agent-kit/
 
 ## Configuration
 
-No env vars or secrets. Skills CLI installs to the detected agent's skills directory. Manual paths include `~/.cursor/skills/`, `~/.claude/skills/`, and equivalent paths for Codex and other supported agents.
+No env vars or secrets. Skills CLI: `npx skills add manu-kaushik/agent-kit --skill source` (no `-g` flag — not supported). Manual paths include `~/.cursor/skills/`, `~/.claude/skills/`, and equivalent paths for Codex and other supported agents.
+
+This repo uses **AGENTS.md** only — no root `CLAUDE.md`.
 
 ## Architecture
 
@@ -101,6 +103,8 @@ One skill directory in-repo. Do not reintroduce an `agents/` + `claude/` split �
 - **OSS baseline** — MIT + README only; skip CONTRIBUTING, CODE_OF_CONDUCT, issue templates, and CI until an external contributor opens an issue.
 - **No versioning for v1** — track `main` only; users re-run `npx skills update`. Tag only if a skill behavior change would break existing dependents.
 - **GitHub topics** — `agent-skills`, `claude-code`, `cursor`, `ai-agents`. Description: "A personal, reusable kit of AI-agent tooling — skills and commands, portable across tools."
+- **Skills CLI install** — `npx skills add manu-kaushik/agent-kit --skill source` only; `-g` is not supported (verified).
+- **agent-kit repo guidance** — `AGENTS.md` only; no root `CLAUDE.md` (Cursor workflow for this repo).
 
 ## Deferred
 

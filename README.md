@@ -9,7 +9,7 @@ Personal, reusable kit of AI-agent skills and commands — portable across Curso
 Persistent project memory for any repo; creates and maintains `SOURCE.md` plus agent guidance files. [Full reference →](docs/source.md)
 
 ```bash
-npx skills add manu-kaushik/agent-kit --skill source -g
+npx skills add manu-kaushik/agent-kit --skill source
 ```
 
 Run `/source init` in a project to bootstrap. Manual install: copy [`skills/source/`](skills/source/) to your agent's skills directory.

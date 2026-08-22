@@ -4,12 +4,8 @@ Create and maintain **SOURCE.md** â€” the persistent project record for a repo â
 
 ## Install
 
-| Scope | Command |
-| ----- | ------- |
-| Every project | `npx skills add manu-kaushik/agent-kit --skill source -g` |
-| Current project only | `npx skills add manu-kaushik/agent-kit --skill source` |
-
 ```bash
+npx skills add manu-kaushik/agent-kit --skill source
 npx skills add manu-kaushik/agent-kit --list   # preview
 ```
 
@@ -51,7 +47,7 @@ Refresh updates empty or TODO fields and clear repo mismatches. It does not blin
 ## Quick start
 
 ```bash
-npx skills add manu-kaushik/agent-kit --skill source -g
+npx skills add manu-kaushik/agent-kit --skill source
 ```
 
 Open a project and run `/source init`.

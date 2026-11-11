@@ -6,7 +6,7 @@ Instructions for AI coding agents working in this repository.
 
 Read [SOURCE.md](SOURCE.md) first — in every chat, before inferring from code or conversation. SOURCE.md is the persistent project record; chat history is not project memory.
 
-When you learn or change durable project facts (stack, architecture, decisions, deferrals, focus), update SOURCE.md. Append to Decisions and Deferred; rewrite Current focus when it shifts. Do not duplicate project facts in chat or in this file.
+When you learn or change durable project facts (stack, architecture, decisions, deferrals, focus), update SOURCE.md. Put each fact in the section that owns it (see Reading SOURCE.md). Do not duplicate project facts in chat or in this file.
 
 Prefer SOURCE.md over this file or codebase inference when they conflict.
 
@@ -15,6 +15,15 @@ Prefer SOURCE.md over this file or codebase inference when they conflict.
 - Always read **Current focus** and **Overview** first.
 - Read other sections only when the task needs them (e.g. **Commands** before run/test work, **Architecture** before large refactors).
 - Never infer project facts from chat when the relevant SOURCE section exists.
+- When a task finishes, update the one section that owns the outcome. Do not leave a session log in SOURCE.md.
+
+| What you learned | Section | How to write it |
+| ---------------- | ------- | --------------- |
+| What we are doing now | **Current focus** | Replace with one short paragraph |
+| Parked work | **Deferred** | One line; remove when that work is done |
+| A durable choice | **Decisions** | Append one bullet: the choice and why |
+| An unresolved question | **Open decisions** | One line; on resolve, append the choice to **Decisions** and delete it here |
+| How the system works | **Architecture** | Update the relevant part |
 
 ## Workflow
 

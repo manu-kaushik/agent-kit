@@ -67,6 +67,20 @@ All templates live in [templates/](templates/).
 
 4. **Resolve filenames** — prefer `SOURCE.md`, `AGENTS.md`, `CLAUDE.md`. Treat lowercase variants as the same file.
 
+### Section map
+
+Write each fact into the section that owns it. Do not leave a session log in SOURCE.md.
+
+| What you learned | Section | How to write it |
+| ---------------- | ------- | --------------- |
+| What we are doing now | **Current focus** | Replace with one short paragraph |
+| Parked work | **Deferred** | One line; remove when that work is done |
+| A durable choice | **Decisions** | Append one bullet: the choice and why |
+| An unresolved question | **Open decisions** | One line; on resolve, append the choice to **Decisions** and delete it here |
+| How the system works | **Architecture** | Update the relevant part |
+
+When a task finishes, update the one section that owns the outcome.
+
 ### init — bootstrap
 
 5. **SOURCE.md**
@@ -82,7 +96,7 @@ All templates live in [templates/](templates/).
    - Do not invent facts; use `<!-- TODO: confirm -->` when uncertain
    - Do not overwrite non-empty values
 
-7. **Merge durable project knowledge** — from the current conversation, append where missing: Decisions, Deferred, Architecture; rewrite Current focus only when focus clearly shifted. Skip if no conversation context.
+7. **Merge durable project knowledge** — from the current conversation, write each fact into the section that owns it (see Section map). Append **Decisions**. Rewrite **Current focus** only when focus clearly shifted. Skip if no conversation context. Do not append a session log.
 
 8. **AGENTS.md** (when guidance scope is `agents`) — create from template if missing; prepend pointer if marker absent; sync default Boundaries block from template (marker rules below).
 
@@ -96,10 +110,11 @@ All templates live in [templates/](templates/).
 
 5. **Read** SOURCE.md, `README.md`, dependency manifests, CI configs, top-level directory layout, and guidance files in scope.
 
-6. **Report** to the user in three groups:
+6. **Report** to the user in four groups:
    - **OK** — sections that match the repo or need no action
    - **Stale** — SOURCE claims X, repo shows Y (cite paths)
-   - **Missing** — template sections absent, marker missing, duplicate header intros, Boundaries block behind template, empty critical cells with repo data available
+   - **Missing** — template sections absent (including **Open decisions**), marker missing, duplicate header intros, Boundaries block behind template, empty critical cells with repo data available
+   - **Shape** — **Current focus** longer than one short paragraph; a **Deferred** item that is done or longer than one line; an **Open decisions** item longer than one line, or a resolved question still listed there; a **Decisions** bullet that is a task list or a multi-paragraph essay
 
 7. **End with:** `Run /source refresh to reconcile.` Do not fix anything.
 
@@ -111,7 +126,11 @@ If SOURCE.md is missing → tell the user to run `/source init` first; stop.
    - Update factual fields (Stack, Commands, Repository layout) only when SOURCE is empty, contains `<!-- TODO: confirm -->`, or repo evidence clearly contradicts SOURCE
    - When ambiguous, add `<!-- stale: … -->` rather than overwriting
    - Normalize header (one intro between `# Source` and `## Overview`)
-   - Remove completed **Deferred** items only when repo or conversation evidence clearly shows completion
+   - When **Current focus** is longer than one short paragraph, rewrite it to one paragraph. Keep the active goal; drop the log. Do not invent a new focus.
+   - Remove a **Deferred** item only when repo or conversation evidence clearly shows completion. Do not shorten a long **Deferred** item on refresh; `check` reports it under **Shape**.
+   - Remove an **Open decisions** item only when it is clearly resolved: append the choice to **Decisions**, then delete the line. Do not shorten a long **Open decisions** item on refresh.
+   - Leave **Decisions** in place. Do not delete or shorten them to save space. Supersede a choice by appending a new bullet that names the old one.
+   - Do not trim SOURCE.md to a character or line cap.
 
 6. **AGENTS.md / CLAUDE.md** (per guidance scope) — sync default Boundaries from template:
    - Replace block between `<!-- source: boundaries-default -->` and `<!-- /source: boundaries-default -->` (markers inclusive)
@@ -130,4 +149,4 @@ Project facts live in SOURCE.md only. Guidance files enforce read/update behavio
 
 ## Ongoing use
 
-During normal work, agents update SOURCE.md when project truth changes — without waiting for `/source init`. Agent behavior → edit AGENTS.md or CLAUDE.md. Project facts → edit SOURCE.md.
+During normal work, agents update SOURCE.md when project truth changes — without waiting for `/source init`. Follow the section map. Agent behavior → edit AGENTS.md or CLAUDE.md. Project facts → edit SOURCE.md.

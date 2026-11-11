@@ -69,8 +69,8 @@ Three commands; `SOURCE.md` is always in scope. Flags `--agents` or `--claude`:
 | Command | Writes? | Purpose |
 | ------- | ------- | ------- |
 | `init` | Yes | Bootstrap SOURCE + one guidance file (detect tool if no flag) |
-| `check` | No | Read-only OK / stale / missing report |
-| `refresh` | Yes | Conservative reconcile from repo; sync Boundaries |
+| `check` | No | Read-only OK / stale / missing / shape report |
+| `refresh` | Yes | Conservative reconcile from repo; rewrite a long Current focus to one paragraph; remove a completed Deferred item or a resolved Open decisions item; sync Boundaries |
 
 For both guidance files, run `init --agents` and `init --claude` separately.
 
@@ -107,6 +107,7 @@ One skill directory in-repo. Do not reintroduce an `agents/` + `claude/` split �
 - **GitHub topics** — `agent-skills`, `claude-code`, `cursor`, `ai-agents`. Description: "A personal, reusable kit of AI-agent tooling — skills and commands, portable across tools."
 - **Skills CLI install** — `npx skills add manu-kaushik/agent-kit --skill source` only; `-g` is not supported (verified).
 - **agent-kit repo guidance** — `AGENTS.md` only; no root `CLAUDE.md` (Cursor workflow for this repo).
+- **SOURCE section shape** — Current focus is one paragraph (refresh rewrites it when longer). Deferred and Open decisions are one line each; refresh removes a line only when the work is done or the question is resolved, and a resolved question is appended to Decisions first. Decisions stay append-only; supersede with a new bullet that names the old one. `check` reports Shape separately. No second progress file and no character cap. The section map lives in the source skill and the AGENTS.md template. Init copies that template only when AGENTS.md is missing; refresh syncs the Boundaries block and leaves the rest of an installed AGENTS.md alone.
 
 ## Deferred
 

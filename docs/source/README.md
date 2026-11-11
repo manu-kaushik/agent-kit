@@ -4,7 +4,7 @@ Create and maintain **SOURCE.md** — the persistent project record for a repo �
 
 ## What SOURCE.md is
 
-Stack, architecture, decisions, deferrals, focus — on disk, not in chat history. Agents read it first and update it when project facts change.
+Stack, architecture, decisions, deferrals, open questions, and focus — on disk, not in chat history. Agents read it first and update it when project facts change.
 
 ## Quick start
 
@@ -40,7 +40,9 @@ Bootstrap a project — creates or updates `SOURCE.md` and the guidance file for
 
 ### check
 
-Read-only health report — compares `SOURCE.md` (and guidance files in scope) against the repo and prints OK / stale / missing. **Does not create, edit, or delete any file.**
+Read-only health report — compares `SOURCE.md` (and guidance files in scope) against the repo and prints OK / stale / missing / shape. **Does not create, edit, or delete any file.**
+
+**Shape** means the section is being used as a journal: **Current focus** longer than one short paragraph, a **Deferred** item that is done or longer than one line, an **Open decisions** item longer than one line or already resolved, or a **Decisions** bullet that is a task list or a multi-paragraph essay.
 
 - **Writes files** — no
 - **Flags** — `--agents` or `--claude` to include that guidance file in the report; omit for `SOURCE.md` only
@@ -52,8 +54,9 @@ Reconcile `SOURCE.md` from repo evidence and sync default Boundaries in guidance
 
 - **Writes files** — yes
 - **Flags** — same as `init`
-- **When to use** — after `check` reports stale or missing items
+- **When to use** — after `check` reports stale or missing items, or a shape issue refresh is allowed to fix (a long **Current focus**, a completed **Deferred** item, or a resolved **Open decisions** item)
 - **Conservative** — updates empty or TODO fields and clear repo mismatches; does not blindly overwrite filled Decisions or Stack entries
+- **Shape** — rewrites **Current focus** to one paragraph when it is longer, keeping the active goal and dropping the log. Removes a **Deferred** item only when it is clearly done, and an **Open decisions** item only when it is clearly resolved (the choice is appended to **Decisions** first). Does not shorten long **Deferred** or **Open decisions** items, and does not delete or shorten **Decisions**. Supersede a choice with a new bullet that names the old one. No character or line cap.
 
 ## Files created/updated by source when run in a project
 

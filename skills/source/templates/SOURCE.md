@@ -10,7 +10,7 @@ Persistent project record for this repository — not chat history, not summarie
 
 ## Current focus
 
-<!-- Active goal or task — rewrite when focus shifts; keep to one short paragraph -->
+<!-- Active goal — one short paragraph. Rewrite the whole paragraph when focus shifts. -->
 
 ## Stack
 
@@ -61,8 +61,12 @@ Persistent project record for this repository — not chat history, not summarie
 
 ## Decisions
 
-<!-- Significant choices and rationale — append new entries; do not remove past decisions without reason -->
+<!-- One bullet per choice: the choice and why. Append; do not remove. Supersede with a new bullet that names the old one. -->
 
 ## Deferred
 
-<!-- Planned work not yet started — add, complete, or remove items as the project moves -->
+<!-- One line per parked item. Remove a line only when that work is done. -->
+
+## Open decisions
+
+<!-- One line per unresolved question. When resolved, append the choice to Decisions and delete it here. -->

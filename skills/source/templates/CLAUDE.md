@@ -2,6 +2,8 @@
 
 Instructions for Claude Code in this repository.
 
+<!-- source: source-of-truth pointer -->
+
 ## Project context
 
 @SOURCE.md

@@ -96,6 +96,8 @@ Two skills, one directory each under `skills/`: `source` and `ignore`. Do not re
 - Conventional Commits
 - Skill frontmatter includes `disable-model-invocation: true` when the skill must only run on explicit `/` invocation
 - Relative links inside a skill stay relative to that skill directory
+- A future subagent file uses exactly `name`, `description`, `model`, `readonly`, and `is_background`. There is no `tools:` field. `.cursor/agents/` wins over `.claude/agents/` and `.codex/agents/`.
+- A future installer is a flat map of source directory names and needs both `install.sh` and `install.ps1`. The Claude plugin marketplace schema is unconfirmed.
 
 ## Constraints
 
@@ -127,40 +129,15 @@ Two skills, one directory each under `skills/`: `source` and `ignore`. Do not re
 - **Engineering standards are optional** — five rules in `rules/engineering/` (principles, code quality, testing, safety, communication), each `alwaysApply: false`. Copy the ones a project needs. They are not part of `/source init` and not installed by the skills CLI. Boundaries stay in the source skill. This repo does not install them into its own `.cursor/rules/`.
 - **Ignore skill** — `/ignore` writes a marked `.cursorignore` block for secrets and stack build or vendor folders. It does not repeat Cursor defaults (`.env*`, `node_modules/`, lockfiles). `!**/.env.example`, `!**/.env.sample`, and `!**/.env.template` stay visible. It does not edit `.gitignore`, and `/source init` does not run it. Supersedes the single-skill limit in the older v1 constraint.
 - **Ignore skill covers other tools** — the same secrets and stack folders are written to Claude Code (`Read` deny rules in `.claude/settings.json`), Codex (a permission-profile deny table, skipped when `sandbox_mode` is set), Windsurf (`.codeiumignore`), Cline (`.clineignore`), Gemini CLI (`.geminiignore`), Antigravity (`.antigravityignore`), and `.aiexclude`. `.claudeignore` is not created. Amp is skipped because it has no ignore file. Supersedes the Cursor-only ignore decision above.
+- **Skills CLI install includes ignore** — `npx skills add manu-kaushik/agent-kit --skill source` or `--skill ignore`. `-g` is still not supported. Supersedes the source-only install decision above.
+- **One Project context** — init adds the source-of-truth marker to an existing Project context section. It prepends the pointer file only when that section is missing, so a templated guidance file does not get a second one.
 
 ## Deferred
 
-**Subagents** — start with two or three focused ones, not a dozen generic helpers:
-
-- `code-reviewer` — `readonly: true`, returns file/line, severity, and a concrete fix
-- `docs-keeper` — keeps README and SOURCE.md accurate against the codebase
-- `board-triage` — issue and PR triage via `gh`
-
-Cursor subagent frontmatter is exactly five fields. There is no `tools:` field — that is Claude Code syntax and Cursor ignores it:
-
-```yaml
----
-name: code-reviewer
-description: Job description the parent agent reads to decide when to delegate.
-model: inherit
-readonly: true
-is_background: false
----
-```
-
-Cursor reads `.cursor/agents/`, `.claude/agents/`, and `.codex/agents/`, with `.cursor/` winning on name conflicts. A file using only `name`, `description`, and `model` is portable across both tools.
-
-**Distribution**
-
-- `install.sh` + `install.ps1` — needed once commands, rules, and subagents exist, since the skills CLI does not carry them. Source directory names already mirror destination directory names, so the installer is a flat mapping. `curl.exe` ships on Windows 10 1803+, but `| sh` does not work in cmd or PowerShell, so both scripts are required.
-- Claude Code plugin marketplace manifest — the only channel that installs skills, subagents, and commands as one unit. Verify the schema against current docs before writing it; believed to be `.claude-plugin/marketplace.json` plus a per-plugin `.claude-plugin/plugin.json`, unconfirmed.
-
-**Additional skills** — several were identified during real work but not written down. Capture them here as they resurface rather than inventing a list now.
+- Subagents: `code-reviewer`, `docs-keeper`, and `board-triage` only. The file shape is under Conventions.
+- Distribution: `install.sh`, `install.ps1`, and a Claude Code plugin marketplace manifest, after commands and subagents exist.
+- Additional skills: capture them when they resurface. Do not invent a list.
 
 ## Open decisions
 
-**`commit-message`: command or skill?** As a command it is a manual copy for every user. As a skill with `disable-model-invocation: true` it behaves identically in Cursor's `/` menu *and* becomes installable via `npx skills add`, which would make v1 zero-manual-step. The tradeoff is that Claude Code would surface it as a model-invoked skill rather than a slash command. Recommend converting; keeping it as a command is the lower-risk default.
-
-**Versioning.** None for v1 (recorded under Decisions). Revisit only if a breaking skill change needs a pin.
-
-**OSS baseline.** MIT + README only for now (recorded under Decisions). Revisit when an external contributor appears.
+- `commit-message`: keep it a command, or convert it to a skill with `disable-model-invocation: true` so the skills CLI can install it.

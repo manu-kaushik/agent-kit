@@ -2,6 +2,8 @@
 
 Instructions for AI coding agents working in this repository.
 
+<!-- source: source-of-truth pointer -->
+
 ## Project context
 
 Read [SOURCE.md](SOURCE.md) first — in every chat, before inferring from code or conversation. SOURCE.md is the persistent project record; chat history is not project memory.

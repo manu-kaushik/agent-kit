@@ -105,9 +105,9 @@ When a task finishes, update the one section that owns the outcome.
 
 8. **Merge durable project knowledge** — from the current conversation, write each fact into the section that owns it (see Section map). Append **Decisions**. Rewrite **Current focus** only when focus clearly shifted. Skip if no conversation context. Do not append a session log.
 
-9. **AGENTS.md** (when guidance scope is `agents`) — create from template if missing; prepend pointer if marker absent; sync default Boundaries block from template (marker rules below).
+9. **AGENTS.md** (when guidance scope is `agents`) — create from template if missing. If the `source: source-of-truth pointer` marker is absent and a Project context section already exists, add the marker above that section. Prepend [templates/AGENTS.prepend.md](templates/AGENTS.prepend.md) only when the marker and that section are both absent. Sync the default Boundaries block from the template (marker rules below).
 
-10. **CLAUDE.md** (when guidance scope is `claude`) — create from template if missing; prepend pointer if marker absent; sync default Boundaries block from template.
+10. **CLAUDE.md** (when guidance scope is `claude`) — create from template if missing. If the pointer marker is absent and a Project context section already exists, add the marker above that section. Prepend [templates/CLAUDE.prepend.md](templates/CLAUDE.prepend.md) only when the marker and that section are both absent. Sync the default Boundaries block from the template.
 
 11. **Summarize** init — scope, one-line status per file touched, gaps needing input (≤5 lines). Name each SOURCE section filled from a guidance file and the file it came from. Those paragraphs stay in the guidance file for the user to remove. If the other guidance file does not exist, note: run `/source init --[other]` if this repo is also used with that tool.
 

@@ -37,12 +37,15 @@ Bootstrap a project — creates or updates `SOURCE.md` and the guidance file for
 - **Writes files** — yes
 - **Flags** — `--agents` or `--claude` to target a specific guidance file; omit to detect from the running tool
 - **When to use** — first setup in a repo, or when adding a guidance file for another tool (`/source init --claude`, etc.)
+- **Existing guidance file** — when `AGENTS.md` or `CLAUDE.md` already exists, project facts are copied into empty `SOURCE.md` sections. Workflow, boundaries, and the guidance file itself stay. The summary names each section filled and the file it came from, so you can remove those paragraphs from the guidance file. If the two files disagree, the section is left as `<!-- TODO: confirm -->`.
 
 ### check
 
-Read-only health report — compares `SOURCE.md` (and guidance files in scope) against the repo and prints OK / stale / missing / shape. **Does not create, edit, or delete any file.**
+Read-only health report — compares `SOURCE.md` (and guidance files in scope) against the repo and prints OK / stale / missing / shape / duplicated. **Does not create, edit, or delete any file.**
 
 **Shape** means the section is being used as a journal: **Current focus** longer than one short paragraph, a **Deferred** item that is done or longer than one line, an **Open decisions** item longer than one line or already resolved, or a **Decisions** bullet that is a task list or a multi-paragraph essay.
+
+**Duplicated** means an existing `AGENTS.md` or `CLAUDE.md` still states a project fact that `SOURCE.md` contains. The report names the file and section. It does not delete the paragraph.
 
 - **Writes files** — no
 - **Flags** — `--agents` or `--claude` to include that guidance file in the report; omit for `SOURCE.md` only
@@ -57,6 +60,7 @@ Reconcile `SOURCE.md` from repo evidence and sync default Boundaries in guidance
 - **When to use** — after `check` reports stale or missing items, or a shape issue refresh is allowed to fix (a long **Current focus**, a completed **Deferred** item, or a resolved **Open decisions** item)
 - **Conservative** — updates empty or TODO fields and clear repo mismatches; does not blindly overwrite filled Decisions or Stack entries
 - **Shape** — rewrites **Current focus** to one paragraph when it is longer, keeping the active goal and dropping the log. Removes a **Deferred** item only when it is clearly done, and an **Open decisions** item only when it is clearly resolved (the choice is appended to **Decisions** first). Does not shorten long **Deferred** or **Open decisions** items, and does not delete or shorten **Decisions**. Supersede a choice with a new bullet that names the old one. No character or line cap.
+- **Existing guidance file** — fills empty `SOURCE.md` sections from project facts still in `AGENTS.md` or `CLAUDE.md`. Does not overwrite a filled section, and does not delete the guidance file or the copied paragraphs.
 
 ## Files created/updated by source when run in a project
 

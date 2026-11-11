@@ -96,33 +96,41 @@ When a task finishes, update the one section that owns the outcome.
    - Do not invent facts; use `<!-- TODO: confirm -->` when uncertain
    - Do not overwrite non-empty values
 
-7. **Merge durable project knowledge** — from the current conversation, write each fact into the section that owns it (see Section map). Append **Decisions**. Rewrite **Current focus** only when focus clearly shifted. Skip if no conversation context. Do not append a session log.
+7. **Copy facts from existing guidance files** — read `AGENTS.md` and `CLAUDE.md` when they already exist. Skip a file this run is about to create from the template.
+   - Copy project facts into SOURCE sections that are empty, still the template comment, or only `<!-- TODO: confirm -->`.
+   - Facts are overview, stack, commands, configuration, repository layout, architecture, conventions, constraints, external services, current focus, decisions, deferred work, and open questions. Write them with the section map's shape.
+   - Leave workflow, boundaries, code-change rules, verification steps, and tool instructions in the guidance file.
+   - Do not overwrite a filled SOURCE section. If the two guidance files disagree, leave `<!-- TODO: confirm -->` and name both files in the summary.
+   - Do not delete either guidance file, and do not remove the copied paragraphs from them.
 
-8. **AGENTS.md** (when guidance scope is `agents`) — create from template if missing; prepend pointer if marker absent; sync default Boundaries block from template (marker rules below).
+8. **Merge durable project knowledge** — from the current conversation, write each fact into the section that owns it (see Section map). Append **Decisions**. Rewrite **Current focus** only when focus clearly shifted. Skip if no conversation context. Do not append a session log.
 
-9. **CLAUDE.md** (when guidance scope is `claude`) — create from template if missing; prepend pointer if marker absent; sync default Boundaries block from template.
+9. **AGENTS.md** (when guidance scope is `agents`) — create from template if missing; prepend pointer if marker absent; sync default Boundaries block from template (marker rules below).
 
-10. **Summarize** init — scope, one-line status per file touched, gaps needing input (≤5 lines). If the other guidance file does not exist, note: run `/source init --[other]` if this repo is also used with that tool.
+10. **CLAUDE.md** (when guidance scope is `claude`) — create from template if missing; prepend pointer if marker absent; sync default Boundaries block from template.
+
+11. **Summarize** init — scope, one-line status per file touched, gaps needing input (≤5 lines). Name each SOURCE section filled from a guidance file and the file it came from. Those paragraphs stay in the guidance file for the user to remove. If the other guidance file does not exist, note: run `/source init --[other]` if this repo is also used with that tool.
 
 ### check — read-only health report
 
 **Do not create, edit, or delete any file.**
 
-5. **Read** SOURCE.md, `README.md`, dependency manifests, CI configs, top-level directory layout, and guidance files in scope.
+5. **Read** SOURCE.md, `README.md`, dependency manifests, CI configs, top-level directory layout, guidance files in scope, and any existing `AGENTS.md` or `CLAUDE.md` for duplicated project facts. Boundaries stay limited to the guidance scope.
 
-6. **Report** to the user in four groups:
+6. **Report** to the user in five groups:
    - **OK** — sections that match the repo or need no action
    - **Stale** — SOURCE claims X, repo shows Y (cite paths)
    - **Missing** — template sections absent (including **Open decisions**), marker missing, duplicate header intros, Boundaries block behind template, empty critical cells with repo data available
    - **Shape** — **Current focus** longer than one short paragraph; a **Deferred** item that is done or longer than one line; an **Open decisions** item longer than one line, or a resolved question still listed there; a **Decisions** bullet that is a task list or a multi-paragraph essay
+   - **Duplicated** — an existing `AGENTS.md` or `CLAUDE.md` still states a project fact that SOURCE.md contains. Name the file and the SOURCE section. Do not delete it.
 
-7. **End with:** `Run /source refresh to reconcile.` Do not fix anything.
+7. **End with:** `Run /source refresh to reconcile.` Do not fix anything. **Duplicated** paragraphs stay in the guidance file; the user removes those by hand.
 
 ### refresh — reconcile
 
 If SOURCE.md is missing → tell the user to run `/source init` first; stop.
 
-5. **SOURCE.md** — apply init steps 5–7, plus conservative reconciliation:
+5. **SOURCE.md** — apply init steps 5–8, plus conservative reconciliation:
    - Update factual fields (Stack, Commands, Repository layout) only when SOURCE is empty, contains `<!-- TODO: confirm -->`, or repo evidence clearly contradicts SOURCE
    - When ambiguous, add `<!-- stale: … -->` rather than overwriting
    - Normalize header (one intro between `# Source` and `## Overview`)
@@ -137,7 +145,7 @@ If SOURCE.md is missing → tell the user to run `/source init` first; stop.
    - If markers absent → insert template block after `## Boundaries`; preserve `<!-- Project-specific additions below -->` and content after it
    - Never remove project-specific additions
 
-7. **Summarize** refresh — what changed, what remains stale or needs manual input (≤5 lines). Suggest `/source check` to verify.
+7. **Summarize** refresh — what changed, which SOURCE sections were filled from a guidance file, and what remains stale or needs manual input (≤5 lines). Copied paragraphs stay in the guidance file for the user to remove. Suggest `/source check` to verify.
 
 ### Boundaries sync (init and refresh)
 
@@ -145,7 +153,7 @@ Extract the marked block from [templates/AGENTS.md](templates/AGENTS.md) or [tem
 
 ### Separation
 
-Project facts live in SOURCE.md only. Guidance files enforce read/update behavior; do not duplicate facts.
+Project facts live in SOURCE.md only. Guidance files enforce read/update behavior. Init and refresh may copy facts from an existing guidance file into empty SOURCE sections; they leave that file and those paragraphs in place. After the copy, remove the fact paragraphs from the guidance file by hand. Do not copy workflow or boundaries into SOURCE.md.
 
 ## Ongoing use
 

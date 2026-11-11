@@ -14,6 +14,16 @@ npx skills add manu-kaushik/agent-kit --skill source
 
 Run `/source init` in a project to bootstrap. Manual install: copy [`skills/source/`](skills/source/) to your agent's skills directory.
 
+### ignore
+
+Writes ignore rules for Cursor, Claude Code, Codex, Windsurf, Cline, Gemini, and Antigravity. Keeps `.env.example` visible and does not edit `.gitignore`. [Full reference →](docs/ignore/)
+
+```bash
+npx skills add manu-kaushik/agent-kit --skill ignore
+```
+
+Run `/ignore` in a project. Manual install: copy [`skills/ignore/`](skills/ignore/) to your agent's skills directory.
+
 ## Commands
 
 ### commit-message

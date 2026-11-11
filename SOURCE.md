@@ -29,6 +29,8 @@ agent-kit/
 ├── docs/
 │   ├── source/
 │   │   └── README.md
+│   ├── ignore/
+│   │   └── README.md
 │   ├── commit-message/
 │   │   └── README.md
 │   └── engineering-standards/
@@ -37,9 +39,11 @@ agent-kit/
 ├── SOURCE.md
 ├── AGENTS.md
 ├── skills/
-│   └── source/
-│       ├── SKILL.md
-│       └── templates/
+│   ├── source/
+│   │   ├── SKILL.md
+│   │   └── templates/
+│   └── ignore/
+│       └── SKILL.md
 ├── commands/
 │   └── commit-message.md
 └── rules/
@@ -57,9 +61,9 @@ agent-kit/
 
 | Task    | Command |
 | ------- | ------- |
-| Install | `npx skills add manu-kaushik/agent-kit --skill source` |
+| Install | `npx skills add manu-kaushik/agent-kit --skill source` or `--skill ignore` |
 | Dev     | — |
-| Test    | `npx skills add manu-kaushik/agent-kit --list` (expect exactly one skill: `source`) |
+| Test    | `npx skills add manu-kaushik/agent-kit --list` (expect `source` and `ignore`) |
 | Lint    | — |
 | Build   | — |
 
@@ -69,7 +73,7 @@ Engineering standards are a manual copy of the chosen files in `rules/engineerin
 
 ## Configuration
 
-No env vars or secrets. Skills CLI: `npx skills add manu-kaushik/agent-kit --skill source` (no `-g` flag — not supported). Manual paths include `~/.cursor/skills/`, `~/.claude/skills/`, and equivalent paths for Codex and other supported agents.
+No env vars or secrets. Skills CLI: `npx skills add manu-kaushik/agent-kit --skill source` or `--skill ignore` (no `-g` flag — not supported). Manual paths include `~/.cursor/skills/`, `~/.claude/skills/`, and equivalent paths for Codex and other supported agents.
 
 This repo uses **AGENTS.md** only — no root `CLAUDE.md`.
 
@@ -85,7 +89,7 @@ Three commands; `SOURCE.md` is always in scope. Flags `--agents` or `--claude`:
 
 For both guidance files, run `init --agents` and `init --claude` separately.
 
-One skill directory in-repo. Do not reintroduce an `agents/` + `claude/` split — two `SKILL.md` copies would publish as two skills with the same name.
+Two skills, one directory each under `skills/`: `source` and `ignore`. Do not reintroduce an `agents/` + `claude/` split — two `SKILL.md` copies of the same name would publish as two skills.
 
 ## Conventions
 
@@ -96,9 +100,9 @@ One skill directory in-repo. Do not reintroduce an `agents/` + `claude/` split �
 ## Constraints
 
 - MIT license
-- v1 ships only existing `source` skill and `commit-message` command — no new skills, subagents, installers, or plugin manifests
-- Distribution for v1: skills CLI / `npx skills add manu-kaushik/agent-kit --skill source` only
-- Exactly one `SKILL.md` in the tree
+- Ships the `source` and `ignore` skills, the `commit-message` command, and optional engineering rules — no subagents, installers, or plugin manifests
+- Distribution: skills CLI / `npx skills add manu-kaushik/agent-kit --skill source` or `--skill ignore`
+- One `SKILL.md` per skill name. Do not add a second copy of the same skill.
 
 ## External services
 
@@ -121,6 +125,8 @@ One skill directory in-repo. Do not reintroduce an `agents/` + `claude/` split �
 - **SOURCE section shape** — Current focus is one paragraph (refresh rewrites it when longer). Deferred and Open decisions are one line each; refresh removes a line only when the work is done or the question is resolved, and a resolved question is appended to Decisions first. Decisions stay append-only; supersede with a new bullet that names the old one. `check` reports Shape separately. No second progress file and no character cap. The section map lives in the source skill and the AGENTS.md template. Init copies that template only when AGENTS.md is missing; refresh syncs the Boundaries block and leaves the rest of an installed AGENTS.md alone.
 - **Facts copied from existing guidance** — init and refresh read an existing AGENTS.md and CLAUDE.md and copy project facts into empty SOURCE sections. Workflow, boundaries, and the guidance files stay, including the copied paragraphs. The summary names what was copied so those paragraphs can be removed by hand. When the two files disagree, the section stays `<!-- TODO: confirm -->`.
 - **Engineering standards are optional** — five rules in `rules/engineering/` (principles, code quality, testing, safety, communication), each `alwaysApply: false`. Copy the ones a project needs. They are not part of `/source init` and not installed by the skills CLI. Boundaries stay in the source skill. This repo does not install them into its own `.cursor/rules/`.
+- **Ignore skill** — `/ignore` writes a marked `.cursorignore` block for secrets and stack build or vendor folders. It does not repeat Cursor defaults (`.env*`, `node_modules/`, lockfiles). `!**/.env.example`, `!**/.env.sample`, and `!**/.env.template` stay visible. It does not edit `.gitignore`, and `/source init` does not run it. Supersedes the single-skill limit in the older v1 constraint.
+- **Ignore skill covers other tools** — the same secrets and stack folders are written to Claude Code (`Read` deny rules in `.claude/settings.json`), Codex (a permission-profile deny table, skipped when `sandbox_mode` is set), Windsurf (`.codeiumignore`), Cline (`.clineignore`), Gemini CLI (`.geminiignore`), Antigravity (`.antigravityignore`), and `.aiexclude`. `.claudeignore` is not created. Amp is skipped because it has no ignore file. Supersedes the Cursor-only ignore decision above.
 
 ## Deferred
 

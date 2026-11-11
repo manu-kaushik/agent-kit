@@ -6,7 +6,7 @@ Persistent project record for this repository — not chat history, not summarie
 
 ## Overview
 
-A personal, reusable kit of AI-agent tooling — skills and commands — portable across Cursor, Claude Code, and other agents that consume the same files. Built for daily personal use first; public because it may help others.
+A personal, reusable kit of AI-agent tooling — skills, commands, and optional rules — portable across Cursor, Claude Code, and other agents that consume the same files. Built for daily personal use first; public because it may help others.
 
 ## Current focus
 
@@ -29,7 +29,9 @@ agent-kit/
 ├── docs/
 │   ├── source/
 │   │   └── README.md
-│   └── commit-message/
+│   ├── commit-message/
+│   │   └── README.md
+│   └── engineering-standards/
 │       └── README.md
 ├── LICENSE
 ├── SOURCE.md
@@ -38,11 +40,18 @@ agent-kit/
 │   └── source/
 │       ├── SKILL.md
 │       └── templates/
-└── commands/
-    └── commit-message.md
+├── commands/
+│   └── commit-message.md
+└── rules/
+    └── engineering/
+        ├── principles.mdc
+        ├── code-quality.mdc
+        ├── testing.mdc
+        ├── safety.mdc
+        └── communication.mdc
 ```
 
-`skills/` at root is the skills CLI container directory. Only files named `SKILL.md` are discoverable; `commands/*.md` (and future `agents/*.md`) stay invisible to the CLI.
+`skills/` at root is the skills CLI container directory. Only files named `SKILL.md` are discoverable; `commands/*.md`, `rules/**/*.mdc`, and future `agents/*.md` stay invisible to the CLI.
 
 ## Commands
 
@@ -55,6 +64,8 @@ agent-kit/
 | Build   | — |
 
 `commit-message` is a manual copy to your agent's commands directory (e.g. `~/.cursor/commands/`, `~/.claude/commands/`).
+
+Engineering standards are a manual copy of the chosen files in `rules/engineering/` into a project's `.cursor/rules/`, or of their bullets into `AGENTS.md` after the project-specific marker. They are not applied in this repo.
 
 ## Configuration
 
@@ -109,6 +120,7 @@ One skill directory in-repo. Do not reintroduce an `agents/` + `claude/` split �
 - **agent-kit repo guidance** — `AGENTS.md` only; no root `CLAUDE.md` (Cursor workflow for this repo).
 - **SOURCE section shape** — Current focus is one paragraph (refresh rewrites it when longer). Deferred and Open decisions are one line each; refresh removes a line only when the work is done or the question is resolved, and a resolved question is appended to Decisions first. Decisions stay append-only; supersede with a new bullet that names the old one. `check` reports Shape separately. No second progress file and no character cap. The section map lives in the source skill and the AGENTS.md template. Init copies that template only when AGENTS.md is missing; refresh syncs the Boundaries block and leaves the rest of an installed AGENTS.md alone.
 - **Facts copied from existing guidance** — init and refresh read an existing AGENTS.md and CLAUDE.md and copy project facts into empty SOURCE sections. Workflow, boundaries, and the guidance files stay, including the copied paragraphs. The summary names what was copied so those paragraphs can be removed by hand. When the two files disagree, the section stays `<!-- TODO: confirm -->`.
+- **Engineering standards are optional** — five rules in `rules/engineering/` (principles, code quality, testing, safety, communication), each `alwaysApply: false`. Copy the ones a project needs. They are not part of `/source init` and not installed by the skills CLI. Boundaries stay in the source skill. This repo does not install them into its own `.cursor/rules/`.
 
 ## Deferred
 
@@ -134,7 +146,7 @@ Cursor reads `.cursor/agents/`, `.claude/agents/`, and `.codex/agents/`, with `.
 
 **Distribution**
 
-- `install.sh` + `install.ps1` — needed once commands and subagents exist, since the skills CLI does not carry them. Source directory names already mirror destination directory names, so the installer is a flat mapping. `curl.exe` ships on Windows 10 1803+, but `| sh` does not work in cmd or PowerShell, so both scripts are required.
+- `install.sh` + `install.ps1` — needed once commands, rules, and subagents exist, since the skills CLI does not carry them. Source directory names already mirror destination directory names, so the installer is a flat mapping. `curl.exe` ships on Windows 10 1803+, but `| sh` does not work in cmd or PowerShell, so both scripts are required.
 - Claude Code plugin marketplace manifest — the only channel that installs skills, subagents, and commands as one unit. Verify the schema against current docs before writing it; believed to be `.claude-plugin/marketplace.json` plus a per-plugin `.claude-plugin/plugin.json`, unconfirmed.
 
 **Additional skills** — several were identified during real work but not written down. Capture them here as they resurface rather than inventing a list now.

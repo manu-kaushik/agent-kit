@@ -1,0 +1,12 @@
+---
+description: Code quality standards when writing or editing code. Use for readable names, explicit errors, and existing formatting.
+alwaysApply: false
+---
+
+# Code quality
+
+- Write clean, readable, and maintainable code.
+- Use meaningful variable and function names.
+- Handle errors explicitly.
+- Avoid duplicated logic.
+- Follow existing formatting conventions.

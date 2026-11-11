@@ -1,0 +1,11 @@
+---
+description: Safety standards for secrets, deletion, and destructive database work. Use before exposing credentials, removing behavior, or destroying data.
+alwaysApply: false
+---
+
+# Safety
+
+- Never expose secrets or credentials.
+- Do not silently delete existing functionality.
+- Ask before destructive database operations.
+- Review changes before completing a task.

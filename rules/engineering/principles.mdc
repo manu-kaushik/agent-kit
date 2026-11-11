@@ -1,0 +1,10 @@
+---
+description: General engineering principles when changing code or choosing an approach. Use for simplicity and fitting the existing architecture.
+alwaysApply: false
+---
+
+# General principles
+
+- Understand existing code before modifying it.
+- Follow existing project architecture.
+- Prefer simple, maintainable solutions.

@@ -1,0 +1,13 @@
+---
+description: Task-completion report. Use when finishing work to state the approach, assumptions, risks, files changed, and tests run.
+alwaysApply: false
+---
+
+# Communication
+
+When finishing a task:
+
+- Explain your implementation approach.
+- Identify assumptions and potential risks.
+- Report files modified.
+- Report tests executed and their results.

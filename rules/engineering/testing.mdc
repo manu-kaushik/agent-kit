@@ -1,0 +1,11 @@
+---
+description: Testing standards when adding behavior or changing tests. Use to require tests and forbid claiming a run that did not happen.
+alwaysApply: false
+---
+
+# Testing
+
+- Write tests for new functionality.
+- Update existing tests when behavior changes.
+- Run relevant tests after implementation.
+- Never claim tests passed without executing them.

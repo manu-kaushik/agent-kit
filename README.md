@@ -32,6 +32,12 @@ Conventional commit message for staged changes; prints the message only, never c
 
 Copy [`commands/commit-message.md`](commands/commit-message.md) to your agent's commands directory (e.g. `~/.cursor/commands/`).
 
+### refine-prompt
+
+Turns a short request into a scoped implementation brief grounded in the repo; prints the brief only, never starts the work. [Full reference →](docs/refine-prompt/)
+
+Copy [`commands/refine-prompt.md`](commands/refine-prompt.md) to your agent's commands directory (e.g. `~/.cursor/commands/`).
+
 ## Rules
 
 ### Engineering standards

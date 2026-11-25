@@ -10,7 +10,7 @@ A personal, reusable kit of AI-agent tooling — skills, commands, and optional 
 
 ## Current focus
 
-v2 source skill shipped (`init`, `check`, `refresh`). Deferred work: subagents, install scripts, commit-message as skill (see Open decisions).
+v2 source skill, the ignore skill, and the `commit-message` and `refine-prompt` commands shipped. Workflows are commands, not subagents. Deferred work: install scripts; commit-message as skill is an Open decision.
 
 ## Stack
 
@@ -33,6 +33,8 @@ agent-kit/
 │   │   └── README.md
 │   ├── commit-message/
 │   │   └── README.md
+│   ├── refine-prompt/
+│   │   └── README.md
 │   └── engineering-standards/
 │       └── README.md
 ├── LICENSE
@@ -45,7 +47,8 @@ agent-kit/
 │   └── ignore/
 │       └── SKILL.md
 ├── commands/
-│   └── commit-message.md
+│   ├── commit-message.md
+│   └── refine-prompt.md
 └── rules/
     └── engineering/
         ├── principles.mdc
@@ -55,7 +58,7 @@ agent-kit/
         └── communication.mdc
 ```
 
-`skills/` at root is the skills CLI container directory. Only files named `SKILL.md` are discoverable; `commands/*.md`, `rules/**/*.mdc`, and future `agents/*.md` stay invisible to the CLI.
+`skills/` at root is the skills CLI container directory. Only files named `SKILL.md` are discoverable; `commands/*.md` and `rules/**/*.mdc` stay invisible to the CLI.
 
 ## Commands
 
@@ -67,7 +70,7 @@ agent-kit/
 | Lint    | — |
 | Build   | — |
 
-`commit-message` is a manual copy to your agent's commands directory (e.g. `~/.cursor/commands/`, `~/.claude/commands/`).
+`commit-message` and `refine-prompt` are manual copies to your agent's commands directory (e.g. `~/.cursor/commands/`, `~/.claude/commands/`).
 
 Engineering standards are a manual copy of the chosen files in `rules/engineering/` into a project's `.cursor/rules/`, or of their bullets into `AGENTS.md` after the project-specific marker. They are not applied in this repo.
 
@@ -96,13 +99,12 @@ Two skills, one directory each under `skills/`: `source` and `ignore`. Do not re
 - Conventional Commits
 - Skill frontmatter includes `disable-model-invocation: true` when the skill must only run on explicit `/` invocation
 - Relative links inside a skill stay relative to that skill directory
-- A future subagent file uses exactly `name`, `description`, `model`, `readonly`, and `is_background`. There is no `tools:` field. `.cursor/agents/` wins over `.claude/agents/` and `.codex/agents/`.
 - A future installer is a flat map of source directory names and needs both `install.sh` and `install.ps1`. The Claude plugin marketplace schema is unconfirmed.
 
 ## Constraints
 
 - MIT license
-- Ships the `source` and `ignore` skills, the `commit-message` command, and optional engineering rules — no subagents, installers, or plugin manifests
+- Ships the `source` and `ignore` skills, the `commit-message` and `refine-prompt` commands, and optional engineering rules — no subagents, installers, or plugin manifests
 - Distribution: skills CLI / `npx skills add manu-kaushik/agent-kit --skill source` or `--skill ignore`
 - One `SKILL.md` per skill name. Do not add a second copy of the same skill.
 
@@ -131,11 +133,12 @@ Two skills, one directory each under `skills/`: `source` and `ignore`. Do not re
 - **Ignore skill covers other tools** — the same secrets and stack folders are written to Claude Code (`Read` deny rules in `.claude/settings.json`), Codex (a permission-profile deny table, skipped when `sandbox_mode` is set), Windsurf (`.codeiumignore`), Cline (`.clineignore`), Gemini CLI (`.geminiignore`), Antigravity (`.antigravityignore`), and `.aiexclude`. `.claudeignore` is not created. Amp is skipped because it has no ignore file. Supersedes the Cursor-only ignore decision above.
 - **Skills CLI install includes ignore** — `npx skills add manu-kaushik/agent-kit --skill source` or `--skill ignore`. `-g` is still not supported. Supersedes the source-only install decision above.
 - **One Project context** — init adds the source-of-truth marker to an existing Project context section. It prepends the pointer file only when that section is missing, so a templated guidance file does not get a second one.
+- **No subagents** — `code-reviewer`, `docs-keeper`, and `board-triage` are dropped in favor of commands. The subagent file-shape convention is removed with them. Supersedes the Deferred subagents item.
+- **refine-prompt command** — `/refine-prompt <request>` reads `SOURCE.md` and the related code, read-only, then prints a one-line goal plus constraint bullets in a code block and stops. It calls a mechanism "existing" only when it found one in the repo, and it never starts the work.
 
 ## Deferred
 
-- Subagents: `code-reviewer`, `docs-keeper`, and `board-triage` only. The file shape is under Conventions.
-- Distribution: `install.sh`, `install.ps1`, and a Claude Code plugin marketplace manifest, after commands and subagents exist.
+- Distribution: `install.sh`, `install.ps1`, and a Claude Code plugin marketplace manifest, after commands exist.
 - Additional skills: capture them when they resurface. Do not invent a list.
 
 ## Open decisions
